@@ -1,8 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Phone, MessageCircle, Menu, X, Shield, Sparkles, ChevronRight, Home, Wrench, DollarSign, Building, Info, Mail } from 'lucide-react';
+import {
+  Phone,
+  Menu,
+  X,
+  Shield,
+  Sparkles,
+  ChevronRight,
+  Home,
+  Wrench,
+  Building,
+  Info,
+  Mail
+} from 'lucide-react';
 import { BUSINESS_PHONE_DISPLAY, BUSINESS_PHONE_RAW, createWhatsAppUrl } from '../utils/whatsapp';
 
-export default function Navbar({ onSelectPackage }) {
+export default function Navbar({ currentPage = 'home', onNavigate }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -24,63 +36,117 @@ export default function Navbar({ onSelectPackage }) {
   }, [mobileMenuOpen]);
 
   const navLinks = [
-    { label: 'Home', href: '#home', icon: Home },
-    { label: 'Services', href: '#services', icon: Wrench },
-    { label: 'Pricing', href: '#pricing', icon: DollarSign },
-    { label: 'Commercial', href: '#commercial', icon: Building },
-    { label: 'About', href: '#about', icon: Info },
-    { label: 'Contact', href: '#contact', icon: Mail },
+    { label: 'Home', shortLabel: 'Home', href: '#home', page: 'home', icon: Home },
+    {
+      label: 'Services',
+      shortLabel: 'Services',
+      href: '#services',
+      page: 'services',
+      icon: Wrench
+    },
+    {
+      label: 'Commercial',
+      shortLabel: 'Commercial',
+      href: '#commercial',
+      page: 'commercial',
+      icon: Building
+    },
+    {
+      label: 'About Us',
+      shortLabel: 'About Us',
+      href: '#about',
+      page: 'about',
+      icon: Info,
+      isAbout: true
+    },
+    { label: 'Contact', shortLabel: 'Contact', href: '#contact-form', page: 'home', icon: Mail },
   ];
 
   const quickWhatsAppUrl = createWhatsAppUrl(
     'Hello NAR Car Wash team, I would like to inquire about your waterless car cleaning services in Dubai.'
   );
 
-  const handleNavClick = (e, href) => {
+  const handleLinkClick = (e, link) => {
+    e.preventDefault();
     setMobileMenuOpen(false);
-    if (href === '#home') {
-      e.preventDefault();
+
+    if (link.page === 'about' || link.page === 'services' || link.page === 'commercial') {
+      if (onNavigate) {
+        onNavigate(link.page);
+      } else {
+        window.location.hash = `#${link.page}`;
+      }
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    // Home navigation
+    if (onNavigate) {
+      onNavigate('home', link.href);
+    } else {
+      window.location.hash = link.href;
+      if (link.href === '#home') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        const el = document.querySelector(link.href);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
+
+  const handleBookClick = (e) => {
+    e.preventDefault();
+    setMobileMenuOpen(false);
+    if (onNavigate) {
+      onNavigate('home', '#contact-form');
+    } else {
+      const el = document.querySelector('#contact-form') || document.querySelector('#booking');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-200 ${
-        mobileMenuOpen
-          ? 'bg-[#101715] border-b border-[#23332D] shadow-2xl'
+      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-200 ${mobileMenuOpen
+          ? 'bg-[#131A21] border-b border-[#384959] shadow-2xl'
           : isScrolled
-          ? 'bg-[#101715]/95 backdrop-blur-md border-b border-[#23332D] shadow-xl'
-          : 'bg-[#101715]/90 backdrop-blur-sm sm:bg-transparent'
-      }`}
+            ? 'bg-[#131A21]/95 backdrop-blur-md border-b border-[#384959] shadow-xl'
+            : 'bg-[#131A21]/90 backdrop-blur-sm sm:bg-transparent'
+        }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 sm:py-4">
         <div className="flex items-center justify-between gap-4">
-          
-          {/* Brand Name Text - Single Line (Total White) */}
+
+          {/* Brand Name Text Branding - Pure White Only */}
           <a
             href="#home"
-            onClick={(e) => handleNavClick(e, '#home')}
-            className="flex items-center gap-1.5 sm:gap-2 focus:outline-none shrink-0 group py-1"
+            onClick={(e) => handleLinkClick(e, { page: 'home', href: '#home' })}
+            className="flex items-center focus:outline-none shrink-0 group py-1"
             aria-label="NAR Car Wash Home"
           >
-            <span className="text-xl sm:text-2xl font-black tracking-wider text-white group-hover:text-gray-200 transition-colors">
+            <span className="text-xl sm:text-2xl font-black tracking-normal text-white font-['Poppins',sans-serif]">
               NAR CAR WASH
             </span>
           </a>
 
-          {/* Desktop Nav Links (Home, Services, Pricing, Commercial, About, Contact) - Decreased padding */}
-          <nav className="hidden lg:flex items-center gap-3 xl:gap-4.5 shrink-0">
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                onClick={(e) => handleNavClick(e, link.href)}
-                className="text-xs xl:text-sm font-medium text-gray-300 hover:text-[#38E1CD] active:text-[#D6B46A] active:scale-95 transition-all whitespace-nowrap px-1.5 py-1 relative hover:after:w-full after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-gradient-to-r after:from-[#087F70] after:to-[#D6B46A] after:transition-all after:duration-200"
-              >
-                {link.label}
-              </a>
-            ))}
+          {/* Desktop Nav Links */}
+          <nav className="hidden lg:flex items-center gap-2 xl:gap-3.5 shrink-0">
+            {navLinks.map((link) => {
+              const isActive = (currentPage === link.page) || (currentPage === 'home' && link.page === 'home' && link.href === '#home');
+              return (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  onClick={(e) => handleLinkClick(e, link)}
+                  className={`text-xs xl:text-sm font-semibold transition-all whitespace-nowrap px-2.5 py-1.5 rounded-lg relative ${isActive
+                      ? 'text-[#88BDF2]'
+                      : 'text-slate-100 hover:text-[#BDDDFC] hover:bg-[#1B242D]/50'
+                    }`}
+                >
+                  {link.shortLabel || link.label}
+                </a>
+              );
+            })}
           </nav>
 
           {/* Right Action Buttons for Desktop */}
@@ -88,7 +154,7 @@ export default function Navbar({ onSelectPackage }) {
             {/* Direct Call Button (Large screens) */}
             <a
               href={`tel:+${BUSINESS_PHONE_RAW}`}
-              className="hidden xl:flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-semibold bg-[#18231F] text-gray-300 border border-[#23332D] hover:border-[#D6B46A] hover:text-[#D6B46A] hover:bg-[#1E2B25] hover:shadow-md hover:shadow-[#D6B46A]/20 active:border-[#38E1CD] active:text-[#38E1CD] active:scale-95 transition-all whitespace-nowrap shrink-0"
+              className="hidden xl:flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-semibold bg-[#1B242D] text-slate-100 border border-[#384959] hover:border-[#88BDF2] hover:text-[#BDDDFC] hover:bg-[#232E3A] hover:shadow-md hover:shadow-[#88BDF2]/20 active:border-[#BDDDFC] active:scale-95 transition-all whitespace-nowrap shrink-0"
             >
               <img
                 src="/images/phone.png"
@@ -98,120 +164,123 @@ export default function Navbar({ onSelectPackage }) {
               <span>{BUSINESS_PHONE_DISPLAY}</span>
             </a>
 
-            {/* Primary Book CTA - Enforced Single Line */}
-            <a
-              href="#booking"
-              className="btn-primary text-xs uppercase tracking-wider font-bold !py-2.5 !px-5 shadow-lg shadow-[#087F70]/20 whitespace-nowrap shrink-0 inline-flex items-center gap-2"
+            {/* Primary Book CTA */}
+            <button
+              type="button"
+              onClick={handleBookClick}
+              className="btn-primary text-xs uppercase tracking-wider font-bold !py-2.5 !px-5 whitespace-nowrap shrink-0 inline-flex items-center gap-2 cursor-pointer"
             >
               <Sparkles className="w-3.5 h-3.5 shrink-0" />
               <span className="whitespace-nowrap">BOOK A WASH</span>
-            </a>
+            </button>
           </div>
 
           {/* Mobile Right Controls: Book Button + Hamburger Toggle */}
           <div className="flex lg:hidden items-center gap-2 sm:gap-3">
-            <a
-              href="#booking"
-              onClick={() => setMobileMenuOpen(false)}
-              className="btn-primary text-xs uppercase font-bold !py-2 !px-3 sm:!px-4 whitespace-nowrap shrink-0"
+            <button
+              type="button"
+              onClick={handleBookClick}
+              className="btn-primary text-xs uppercase font-bold !py-2 !px-3 sm:!px-4 whitespace-nowrap shrink-0 cursor-pointer"
             >
               BOOK A WASH
-            </a>
-            
+            </button>
+
             {/* Hamburger Button on Right Side */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 sm:p-2.5 rounded-xl text-gray-200 hover:text-white bg-[#18231F] border border-[#23332D] hover:border-[#087F70] focus:outline-none transition-colors"
+              className="p-2 sm:p-2.5 rounded-xl text-slate-100 hover:text-white bg-[#1B242D] border border-[#384959] hover:border-[#88BDF2] focus:outline-none transition-colors"
               aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
               aria-expanded={mobileMenuOpen}
             >
-              {mobileMenuOpen ? <X className="w-5 h-5 text-white" /> : <Menu className="w-5 h-5 text-[#0CA693]" />}
+              {mobileMenuOpen ? <X className="w-5 h-5 text-white" /> : <Menu className="w-5 h-5 text-[#88BDF2]" />}
             </button>
           </div>
 
         </div>
       </div>
 
-      {/* Mobile Drawer Overlay & Menu */}
+      {/* Mobile Drawer Overlay & Menu (Hamburg Menu) */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-[#23332D] px-4 sm:px-6 py-5 pb-24 space-y-5 bg-[#101715] max-h-[calc(100vh-66px)] overflow-y-auto">
-          <div className="max-w-md mx-auto space-y-5">
-            
+        <div className="lg:hidden fixed inset-x-0 top-[60px] sm:top-[68px] bottom-0 bg-[#131A21] border-t border-[#384959] px-4 sm:px-6 py-5 pb-8 overflow-y-auto z-50">
+          <div className="max-w-md mx-auto min-h-full flex flex-col justify-between space-y-5">
+
             {/* Navigation Links list */}
-            <div className="space-y-1">
-              <div className="text-[11px] font-bold uppercase tracking-wider text-gray-400 px-3 pb-2">
-                Menu Navigation
+            <div className="space-y-2">
+              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-300 px-3 pb-1 flex items-center justify-between">
+                <span>Menu Navigation</span>
+                <span className="text-[10px] text-[#BDDDFC]">Dubai Operations</span>
               </div>
+
               {navLinks.map((link) => {
-                const IconComponent = link.icon;
+                const isCurrent = (currentPage === link.page) || (currentPage === 'home' && link.page === 'home' && link.href === '#home');
                 return (
-                  <a
+                  <button
                     key={link.label}
-                    href={link.href}
-                    onClick={(e) => handleNavClick(e, link.href)}
-                    className="flex items-center justify-between text-sm sm:text-base font-semibold text-gray-200 hover:text-[#38E1CD] hover:bg-[#18231F] hover:border-[#0CA693] active:text-[#D6B46A] active:bg-[#1E2B25] active:border-[#D6B46A] active:scale-[0.98] px-3.5 py-2.5 rounded-xl transition-all border border-[#1C2723] bg-[#141D1A]"
+                    type="button"
+                    onClick={(e) => handleLinkClick(e, link)}
+                    className={`w-full flex items-center justify-between text-left text-sm sm:text-base font-semibold px-4 py-3 rounded-xl transition-all border ${isCurrent
+                        ? 'border-[#88BDF2] bg-[#232E3A] text-[#BDDDFC]'
+                        : 'border-[#384959] bg-[#1B242D] text-slate-100 hover:text-[#BDDDFC] hover:bg-[#232E3A] hover:border-[#88BDF2]'
+                      }`}
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="w-7 h-7 rounded-lg bg-[#18231F] flex items-center justify-center text-[#0CA693] group-active:text-[#D6B46A]">
-                        <IconComponent className="w-3.5 h-3.5" />
-                      </div>
-                      <span>{link.label}</span>
-                    </div>
-                    <ChevronRight className="w-4 h-4 text-gray-500" />
-                  </a>
+                    <span>{link.label}</span>
+                    <ChevronRight className="w-4 h-4 text-slate-400 shrink-0" />
+                  </button>
                 );
               })}
             </div>
 
-            {/* Quick Actions Inside Mobile Menu */}
-            <div className="pt-2 border-t border-[#1F2C27] space-y-3">
-              <a
-                href="#booking"
-                onClick={() => setMobileMenuOpen(false)}
-                className="btn-primary w-full py-3.5 text-center text-sm font-bold uppercase tracking-wider flex items-center justify-center gap-2"
-              >
-                <Sparkles className="w-4 h-4" />
-                <span>BOOK A WASH NOW</span>
-              </a>
+            {/* Bottom Group: Quick Action Buttons & Credential Badge */}
+            <div className="mt-auto pt-6 space-y-4">
+              <div className="space-y-3">
+                <button
+                  type="button"
+                  onClick={handleBookClick}
+                  className="w-full py-3.5 rounded-full bg-[#88BDF2] text-[#0E1620] font-bold text-sm uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-none hover:bg-[#BDDDFC] active:scale-95 transition-all outline-none focus:outline-none ring-0 border-0"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  <span>BOOK A WASH NOW</span>
+                </button>
 
-              <a
-                href={`tel:+${BUSINESS_PHONE_RAW}`}
-                className="flex items-center justify-center gap-2.5 w-full py-3 rounded-xl bg-[#18231F] text-gray-200 border border-[#23332D] font-medium text-xs sm:text-sm hover:border-[#D6B46A] transition-colors"
-              >
-                <img
-                  src="/images/phone.png"
-                  alt="Phone"
-                  className="w-4 h-4 brightness-0 invert object-contain"
-                />
-                <span>Call {BUSINESS_PHONE_DISPLAY}</span>
-              </a>
+                <a
+                  href={`tel:+${BUSINESS_PHONE_RAW}`}
+                  className="flex items-center justify-center gap-2.5 w-full py-3 rounded-xl bg-[#1B242D] text-slate-100 border border-[#384959] font-medium text-xs sm:text-sm hover:border-[#88BDF2] hover:text-[#BDDDFC] transition-colors"
+                >
+                  <img
+                    src="/images/phone.png"
+                    alt="Phone"
+                    className="w-4 h-4 brightness-0 invert object-contain"
+                  />
+                  <span>Call {BUSINESS_PHONE_DISPLAY}</span>
+                </a>
 
-              <a
-                href={quickWhatsAppUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center justify-center gap-2.5 w-full py-3 rounded-xl bg-[#18231F] text-[#0CA693] border border-[#087F70]/40 font-medium text-xs sm:text-sm hover:bg-[#1E2B25] transition-colors"
-              >
-                <img
-                  src="/images/whatsapp.png"
-                  alt="WhatsApp"
-                  className="w-4 h-4 object-contain"
-                />
-                <span>Chat on WhatsApp</span>
-              </a>
-            </div>
-
-            {/* Credential Badge in Mobile Menu */}
-            <div className="pt-2 text-center space-y-1">
-              <div className="inline-flex items-center gap-1.5 text-xs text-[#0CA693] font-medium">
-                <Shield className="w-3.5 h-3.5" />
-                <span>DED Licensed · TPL Insured</span>
+                <a
+                  href={quickWhatsAppUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center gap-2.5 w-full py-3 rounded-xl bg-[#1B242D] text-[#88BDF2] border border-[#6A89A7]/50 font-semibold text-xs sm:text-sm hover:bg-[#232E3A] hover:border-[#88BDF2] transition-colors"
+                >
+                  <img
+                    src="/images/whatsapp.png"
+                    alt="WhatsApp"
+                    className="w-4 h-4 object-contain"
+                  />
+                  <span>Chat on WhatsApp</span>
+                </a>
               </div>
-              <p className="text-[11px] text-gray-400">
-                NADA AL RABEE CAR WASHING LLC · Dubai, UAE
-              </p>
+
+              {/* Credential Badge in Mobile Menu */}
+              <div className="pt-1 text-center space-y-1">
+                <div className="inline-flex items-center gap-1.5 text-xs text-[#BDDDFC] font-semibold">
+                  <Shield className="w-3.5 h-3.5 text-[#88BDF2]" />
+                  <span>DED Licensed · TPL Insured</span>
+                </div>
+                <p className="text-[11px] text-slate-300">
+                  NADA AL RABEE CAR WASHING LLC · Dubai, UAE
+                </p>
+              </div>
             </div>
 
           </div>

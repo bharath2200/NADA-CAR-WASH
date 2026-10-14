@@ -1,130 +1,91 @@
 import React from 'react';
-import { Sparkles, ArrowRight, ShieldCheck, DropletOff, Calendar, Award } from 'lucide-react';
+import { Sparkles, ArrowRight, ShieldCheck, Droplets, MapPin } from 'lucide-react';
 
-export default function Hero({ onOpenBooking }) {
-
+export default function Hero({ onOpenBooking, onExploreServices }) {
   return (
-    <section id="home" className="relative min-h-[85vh] pt-24 sm:pt-28 pb-12 sm:pb-16 flex items-center overflow-hidden bg-[#101715]">
+    <section id="home" className="relative min-h-[100dvh] pt-20 sm:pt-24 pb-6 sm:pb-8 flex flex-col justify-between overflow-hidden bg-[#131A21]">
+      {/* Background Dubai Skyline at Dusk with High Visibility */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <img
+          src="https://i.ibb.co/TqrZhWkt/Moody-Dubai-Skyline-at-Dusk.png"
+          alt="Moody Dubai Skyline at Dusk"
+          className="w-full h-full object-cover object-[65%_center] sm:object-center opacity-75"
+        />
+        {/* Soft atmospheric overlay: keeps skyline and sunset vivid while ensuring WCAG AAA text contrast */}
+        <div className="absolute inset-0 bg-[#0E1620]/60" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#131A21] via-transparent to-[#131A21]/80" />
+      </div>
+
       {/* Background ambient radial gradients */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-[#087F70]/10 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-10 right-10 w-[450px] h-[350px] bg-[#D6B46A]/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-[#88BDF2]/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-10 right-10 w-[450px] h-[350px] bg-[#6A89A7]/10 rounded-full blur-[120px] pointer-events-none" />
 
-      {/* Subtle geometric pattern overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(#18231F_1px,transparent_1px)] [background-size:24px_24px] opacity-40 pointer-events-none" />
+      {/* Main Hero Content - Clean, Balanced & Vertically Centered */}
+      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10 text-center flex-1 flex flex-col justify-center items-center py-8 sm:py-12">
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-          
-          {/* Left Hero Text Column */}
-          <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-            
-            {/* Top Pill Tag */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#18231F] border border-[#2E453D] shadow-inner">
-              <span className="w-2 h-2 rounded-full bg-[#087F70] animate-pulse" />
-              <span className="text-xs font-semibold tracking-wide text-gray-200">
-                NADA AL RABEE CAR WASHING LLC · DUBAI, UAE
-              </span>
-            </div>
-
-            {/* Main Headline */}
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white leading-[1.12]">
-              Premium Waterless <br className="hidden sm:inline" />
-              <span className="teal-gradient-text">Car Wash in Dubai</span>
-            </h1>
-
-            {/* Subtitle / Supporting message */}
-            <p className="text-base sm:text-lg text-gray-300 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
-              Experience the pinnacle of sustainable automotive care. We deliver showroom-grade, 
-              scratch-free waterless washing right to your residential parking slot, mall, or office complex. 
-              Zero puddles, zero water waste, maximum gloss.
-            </p>
-
-            {/* Key Value Badges */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2 text-xs text-gray-300">
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#18231F]/80 border border-[#23332D]">
-                <DropletOff className="w-4 h-4 text-[#0CA693]" />
-                <span>100% Waterless & Basement-Safe</span>
-              </div>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#18231F]/80 border border-[#23332D]">
-                <ShieldCheck className="w-4 h-4 text-[#D6B46A]" />
-                <span>TPL Insured & DED Registered</span>
-              </div>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#18231F]/80 border border-[#23332D]">
-                <Calendar className="w-4 h-4 text-[#0CA693]" />
-                <span>Operating Since 2020</span>
-              </div>
-            </div>
-
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
-              <a
-                href="#booking"
-                className="w-full sm:w-auto btn-primary text-base font-semibold px-8 py-3.5 shadow-xl shadow-[#087F70]/25 group"
-              >
-                <Sparkles className="w-4 h-4 transition-transform group-hover:rotate-12" />
-                <span>Book a Wash</span>
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-              </a>
-
-              <a
-                href="#services"
-                className="w-full sm:w-auto btn-secondary text-base font-medium px-7 py-3.5"
-              >
-                Explore Services
-              </a>
-            </div>
-
-            {/* Package teaser */}
-            <div className="pt-2 text-xs text-gray-400 text-center lg:text-left flex items-center justify-center lg:justify-start gap-2">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#D6B46A]"></span>
-              <span>Monthly 12-Wash Subscriptions start from just <strong className="text-white font-semibold">120 AED</strong> for Saloons & <strong className="text-white font-semibold">150 AED</strong> for SUVs.</span>
-            </div>
-
-          </div>
-
-          {/* Right Hero Image Card */}
-          <div className="lg:col-span-5 relative">
-            <div className="relative mx-auto max-w-md lg:max-w-none">
-              
-              {/* Outer decorative gradient border */}
-              <div className="relative rounded-2xl p-1 bg-gradient-to-tr from-[#087F70]/40 via-[#2E453D] to-[#D6B46A]/30 shadow-2xl overflow-hidden group">
-                <div className="relative rounded-[14px] overflow-hidden bg-[#141D1A]">
-                  <img
-                    src="https://i.ibb.co/G3bgNsLt/NAR-Luxury-Car-Wash-Dubai-skyline.png"
-                    alt="NAR Car Wash Premium Detailing in Dubai"
-                    className="w-full h-[360px] sm:h-[440px] object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                  />
-                  {/* Subtle vignette shadow overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#101715] via-transparent to-black/20" />
-                </div>
-              </div>
-
-              {/* Floating Badge 1: Monthly Package */}
-              <div className="absolute -bottom-4 left-2 sm:-left-6 bg-[#18231F]/95 backdrop-blur-md border border-[#2E453D] rounded-xl p-3 sm:p-3.5 shadow-2xl flex items-center gap-3">
-                <div className="w-9 sm:w-10 h-9 sm:h-10 rounded-lg bg-[#087F70]/20 flex items-center justify-center text-[#0CA693] shrink-0">
-                  <Award className="w-5 h-5 text-[#0CA693]" />
-                </div>
-                <div>
-                  <div className="text-[11px] sm:text-xs text-gray-400 font-medium">Monthly 12-Wash Plan</div>
-                  <div className="text-xs sm:text-sm font-bold text-white flex items-baseline gap-1">
-                    <span className="text-[#D6B46A]">120 AED</span>
-                    <span className="text-[10px] sm:text-[11px] text-gray-400 font-normal">/ Saloon</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Floating Badge 2: Sustainable Waterless */}
-              <div className="absolute -top-3 right-2 sm:-right-4 bg-[#18231F]/95 backdrop-blur-md border border-[#2E453D] rounded-xl py-2 px-3 sm:py-2.5 sm:px-3.5 shadow-2xl flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-[#087F70] animate-ping shrink-0" />
-                <span className="text-[11px] sm:text-xs font-semibold text-gray-200">
-                  Zero Water Wastage
-                </span>
-              </div>
-
-            </div>
-          </div>
-
+        {/* Top Location / Service Pill */}
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1B242D]/90 backdrop-blur-md border border-[#384959] shadow-inner mb-5 sm:mb-6">
+          <span className="w-2 h-2 rounded-full bg-[#88BDF2] animate-pulse" />
+          <span className="text-xs sm:text-sm font-semibold tracking-wide text-[#BDDDFC]">
+            PREMIUM WATERLESS CAR WASH · DUBAI, UAE
+          </span>
         </div>
+
+        {/* Brand Headline */}
+        <h1 className="text-3xl xs:text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white leading-[1.12] mb-4 sm:mb-6">
+          NADA AL RABEE CAR <br className="hidden sm:inline" />
+          <span className="palette-gradient-text">WASHING LLC</span>
+        </h1>
+
+        {/* Subtitle / Bio */}
+        <p className="text-sm sm:text-lg md:text-xl text-slate-200 max-w-2xl mx-auto font-normal leading-relaxed mb-6 sm:mb-8 px-2">
+          Showroom-grade, scratch-free waterless car washing delivered right to your parking bay across Dubai. Zero puddles, maximum gloss.
+        </p>
+
+        {/* Clean Trust Features */}
+        <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-4 mb-7 sm:mb-9 text-xs sm:text-sm font-medium text-slate-300">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#1B242D]/70 border border-[#384959]/60 backdrop-blur-sm">
+            <ShieldCheck className="w-4 h-4 text-[#88BDF2]" />
+            <span>Scratch-Free Formula</span>
+          </div>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#1B242D]/70 border border-[#384959]/60 backdrop-blur-sm">
+            <Droplets className="w-4 h-4 text-[#88BDF2]" />
+            <span>100% Waterless</span>
+          </div>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#1B242D]/70 border border-[#384959]/60 backdrop-blur-sm">
+            <MapPin className="w-4 h-4 text-[#88BDF2]" />
+            <span>To Your Parking Bay</span>
+          </div>
+        </div>
+
+        {/* Call to Action Buttons */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4 w-full sm:w-auto">
+          <a
+            href="#contact-form"
+            onClick={() => onOpenBooking && onOpenBooking()}
+            className="w-full sm:w-auto btn-primary text-base font-bold px-8 py-3.5 group flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-[#88BDF2]/20"
+          >
+            <Sparkles className="w-4 h-4 transition-transform group-hover:rotate-12" />
+            <span>Book a Wash</span>
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+          </a>
+
+          <button
+            type="button"
+            onClick={() => onExploreServices && onExploreServices()}
+            className="w-full sm:w-auto btn-secondary text-base font-semibold px-8 py-3.5 flex items-center justify-center cursor-pointer"
+          >
+            Explore Services
+          </button>
+        </div>
+
+      </div>
+
+      {/* Bottom Quality & Safety Guarantee */}
+      <div className="relative z-10 w-full px-4 text-center pb-4 pt-2 mt-auto">
+        <p className="text-[11px] sm:text-xs text-slate-300 max-w-md mx-auto text-center leading-normal">
+          Proprietary scratch-free polymer formula safe for ceramic coats, wraps, and delicate clear coats.
+        </p>
       </div>
     </section>
   );

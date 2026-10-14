@@ -1,94 +1,141 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import About from './components/About';
-import Services from './components/Services';
-import CommercialSolutions from './components/CommercialSolutions';
-import Pricing from './components/Pricing';
-import BookingForm from './components/BookingForm';
+import WorkedBuildings from './components/WorkedBuildings';
 import Contact from './components/Contact';
+import ServicesPage from './components/ServicesPage';
+import CommercialPage from './components/CommercialPage';
+import AboutPage from './components/AboutPage';
 import Footer from './components/Footer';
-import { MessageCircle } from 'lucide-react';
 import { createWhatsAppUrl, BUSINESS_PHONE_DISPLAY } from './utils/whatsapp';
 
 export default function App() {
-  const [selectedPlan, setSelectedPlan] = useState(null);
+  const [currentPage, setCurrentPage] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash;
+      if (hash === '#about') return 'about';
+      if (hash === '#services' || hash === '#procedure') return 'services';
+      if (hash === '#commercial') return 'commercial';
+    }
+    return 'home';
+  });
 
-  const handleSelectPlan = (plan) => {
-    setSelectedPlan(plan);
-    const bookingElement = document.getElementById('booking');
-    if (bookingElement) {
-      bookingElement.scrollIntoView({ behavior: 'smooth' });
+  const [selectedService, setSelectedService] = useState(null);
+
+  // Sync with browser URL hash
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash === '#about') {
+        setCurrentPage('about');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (hash === '#services' || hash === '#procedure') {
+        setCurrentPage('services');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (hash === '#commercial') {
+        setCurrentPage('commercial');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        setCurrentPage('home');
+      }
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  const handleNavigate = (page, hash) => {
+    setCurrentPage(page);
+    if (page === 'about') {
+      window.location.hash = '#about';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (page === 'services') {
+      window.location.hash = '#services';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (page === 'commercial') {
+      window.location.hash = '#commercial';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      if (hash) {
+        window.location.hash = hash;
+        setTimeout(() => {
+          if (hash === '#home') {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          } else {
+            const target = document.querySelector(hash);
+            if (target) {
+              target.scrollIntoView({ behavior: 'smooth' });
+            }
+          }
+        }, 60);
+      } else {
+        window.location.hash = '';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
   };
 
   const handleSelectService = (serviceId) => {
-    const bookingElement = document.getElementById('booking');
-    if (bookingElement) {
-      bookingElement.scrollIntoView({ behavior: 'smooth' });
-    }
+    setSelectedService(serviceId);
+    handleNavigate('home', '#contact-form');
   };
 
-  const floatingWhatsAppUrl = createWhatsAppUrl(
-    'Hello NAR Car Wash, I would like to book a waterless wash in Dubai.'
-  );
-
   return (
-    <div className="min-h-screen bg-[#101715] text-[#F3F4F6] selection:bg-[#087F70] selection:text-white font-['Poppins',sans-serif] relative">
+    <div className="min-h-screen bg-[#131A21] text-[#F8FAFC] selection:bg-[#88BDF2] selection:text-[#131A21] font-['Poppins',sans-serif] relative">
       
       {/* Sticky Header Navigation */}
-      <Navbar onSelectPackage={handleSelectPlan} />
+      <Navbar 
+        currentPage={currentPage} 
+        onNavigate={handleNavigate} 
+      />
 
-      {/* Main Page Content */}
-      <main>
-        {/* 01: Hero Section */}
-        <Hero onOpenBooking={() => handleSelectPlan(null)} />
+      {/* Main Page View Switching */}
+      {currentPage === 'about' ? (
+        /* Dedicated About NADA AL RABEE CAR WASHING LLC Page */
+        <main>
+          <AboutPage 
+            onBack={() => handleNavigate('home', '#home')}
+            onOpenBooking={() => handleNavigate('home', '#contact-form')}
+          />
+        </main>
+      ) : currentPage === 'services' ? (
+        /* Dedicated Standardized Vehicle Cleaning Procedure & Care Page */
+        <main>
+          <ServicesPage
+            onBack={() => handleNavigate('home', '#home')}
+            onOpenBooking={() => handleNavigate('home', '#contact-form')}
+            onSelectService={handleSelectService}
+          />
+        </main>
+      ) : currentPage === 'commercial' ? (
+        /* Dedicated Commercial Solutions Page */
+        <main>
+          <CommercialPage
+            onBack={() => handleNavigate('home', '#home')}
+            onOpenBooking={() => handleNavigate('home', '#contact-form')}
+          />
+        </main>
+      ) : (
+        /* Streamlined High-Converting Homepage: Hero -> Worked Buildings -> Get in touch -> Footer */
+        <main>
+          {/* 01: Hero Section */}
+          <Hero 
+            onOpenBooking={() => handleNavigate('home', '#contact-form')} 
+            onExploreServices={() => handleNavigate('services')}
+          />
 
-        {/* 02: About Us & Trust */}
-        <About />
+          {/* 02: Worked Buildings Section */}
+          <WorkedBuildings 
+            onOpenBooking={() => handleNavigate('home', '#contact-form')}
+            onOpenCommercial={() => handleNavigate('commercial')}
+          />
 
-        {/* 03: Services */}
-        <Services onSelectService={handleSelectService} />
+          {/* 03: Unified Get In Touch & Booking Form (Single form, no redundant cards) */}
+          <Contact preselectedService={selectedService} />
+        </main>
+      )}
 
-        {/* 04: Commercial Solutions */}
-        <CommercialSolutions />
-
-        {/* 05: Pricing */}
-        <Pricing onSelectPlan={handleSelectPlan} />
-
-        {/* 06: Dedicated Interactive Booking Form */}
-        <BookingForm preselectedData={selectedPlan} />
-
-        {/* 07: Contact */}
-        <Contact />
-      </main>
-
-      {/* 08: Footer */}
-      <Footer />
-
-      {/* Persistent Floating WhatsApp Quick-Access Button */}
-      <aside aria-label="WhatsApp quick contact">
-        <a
-          href={floatingWhatsAppUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="fixed bottom-6 right-6 z-40 group flex items-center gap-2.5 p-3.5 sm:px-4 sm:py-3.5 rounded-full bg-[#087F70] text-white shadow-2xl hover:bg-[#0CA693] transition-all duration-300 hover:scale-105 border border-white/20"
-          title={`Chat with NAR Car Wash on WhatsApp (${BUSINESS_PHONE_DISPLAY})`}
-        >
-          <div className="relative flex items-center justify-center">
-            <img
-              src="/images/whatsapp.png"
-              alt="WhatsApp"
-              className="w-6 h-6 object-contain"
-            />
-            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#D6B46A] border-2 border-[#087F70]" />
-          </div>
-          <span className="hidden sm:inline font-semibold text-xs tracking-wide">
-            Book on WhatsApp
-          </span>
-        </a>
-      </aside>
-
+      {/* Footer */}
+      <Footer onNavigate={handleNavigate} />
     </div>
   );
 }
