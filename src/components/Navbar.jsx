@@ -190,7 +190,7 @@ export default function Navbar({ currentPage = 'home', onNavigate }) {
             : 'bg-[#131A21]/90 backdrop-blur-sm sm:bg-transparent'
         }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 sm:py-2.5">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1.5 sm:py-2">
         <div className="flex items-center justify-between gap-3 sm:gap-4">
 
           {/* Brand Header Logo */}
@@ -203,7 +203,7 @@ export default function Navbar({ currentPage = 'home', onNavigate }) {
             <img
               src="/Logo.png"
               alt="NAR Car Wash - NADA AL RABEE CAR WASHING LLC"
-              className="h-10 sm:h-11 md:h-12 w-auto object-contain block"
+              className="h-11 sm:h-12 md:h-13 w-auto object-contain block"
             />
           </a>
 
