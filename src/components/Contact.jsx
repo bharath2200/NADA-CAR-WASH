@@ -550,8 +550,7 @@ export default function Contact({ preselectedService }) {
                         onChange={(e) => handleChange('parkingSpaces', e.target.value)}
                         placeholder="e.g. 150 bays"
                         className="w-full px-4 py-3 rounded-xl bg-[#131A21] border border-[#384959] text-white placeholder-slate-400 text-sm focus:outline-none focus:border-[#88BDF2] transition-colors"
-                      >
-                      </input>
+                      />
                     </div>
                   </div>
                 </div>

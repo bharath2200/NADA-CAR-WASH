@@ -46,10 +46,16 @@
   }
 
   html {
-    scroll-behavior: smooth;
     font-family: 'Poppins', sans-serif;
     background-color: #131A21;
     color: #F8FAFC;
+    overflow-x: clip;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html:focus-within {
+      scroll-behavior: smooth;
+    }
   }
 
   body {
@@ -58,6 +64,7 @@
     color: #F8FAFC;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
   }
 
   /* Custom text selection highlight */

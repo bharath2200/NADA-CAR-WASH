@@ -35,9 +35,20 @@ export default function Navbar({ currentPage = 'home', onNavigate }) {
     }
   }, [mobileMenuOpen]);
 
+  const [activeHomeSection, setActiveHomeSection] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash;
+      if (hash === '#contact-form' || hash === '#contact' || hash === '#booking') {
+        return 'contact';
+      }
+    }
+    return 'home';
+  });
+
   const navLinks = [
-    { label: 'Home', shortLabel: 'Home', href: '#home', page: 'home', icon: Home },
+    { id: 'home', label: 'Home', shortLabel: 'Home', href: '#home', page: 'home', icon: Home },
     {
+      id: 'services',
       label: 'Services',
       shortLabel: 'Services',
       href: '#services',
@@ -45,6 +56,7 @@ export default function Navbar({ currentPage = 'home', onNavigate }) {
       icon: Wrench
     },
     {
+      id: 'commercial',
       label: 'Commercial',
       shortLabel: 'Commercial',
       href: '#commercial',
@@ -52,6 +64,7 @@ export default function Navbar({ currentPage = 'home', onNavigate }) {
       icon: Building
     },
     {
+      id: 'about',
       label: 'About Us',
       shortLabel: 'About Us',
       href: '#about',
@@ -59,12 +72,68 @@ export default function Navbar({ currentPage = 'home', onNavigate }) {
       icon: Info,
       isAbout: true
     },
-    { label: 'Contact', shortLabel: 'Contact', href: '#contact-form', page: 'home', icon: Mail },
+    { id: 'contact', label: 'Contact', shortLabel: 'Contact', href: '#contact-form', page: 'home', icon: Mail },
   ];
+
+  // Track scroll position on home page to distinguish between Home and Contact section
+  useEffect(() => {
+    if (currentPage !== 'home') return;
+
+    const checkActiveSection = () => {
+      const contactEl = document.getElementById('contact-form') || document.getElementById('contact');
+      if (!contactEl) {
+        setActiveHomeSection('home');
+        return;
+      }
+      
+      const isAtBottom =
+        window.innerHeight + window.scrollY >= (document.documentElement.scrollHeight - 80);
+      
+      const rect = contactEl.getBoundingClientRect();
+      if (isAtBottom || (rect.top <= window.innerHeight * 0.45 && rect.bottom >= 120)) {
+        setActiveHomeSection('contact');
+      } else {
+        setActiveHomeSection('home');
+      }
+    };
+
+    window.addEventListener('scroll', checkActiveSection, { passive: true });
+    checkActiveSection();
+
+    return () => window.removeEventListener('scroll', checkActiveSection);
+  }, [currentPage]);
+
+  // Sync with browser hash changes for contact form vs home
+  useEffect(() => {
+    const handleHashChange = () => {
+      if (window.location.hash === '#contact-form' || window.location.hash === '#contact' || window.location.hash === '#booking') {
+        setActiveHomeSection('contact');
+      } else if (window.location.hash === '#home' || !window.location.hash) {
+        if (currentPage === 'home') {
+          setActiveHomeSection('home');
+        }
+      }
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, [currentPage]);
 
   const quickWhatsAppUrl = createWhatsAppUrl(
     'Hello NAR Car Wash team, I would like to inquire about your waterless car cleaning services in Dubai.'
   );
+
+  const isLinkActive = (link) => {
+    if (currentPage === 'home') {
+      if (link.id === 'contact' || link.href === '#contact-form') {
+        return activeHomeSection === 'contact';
+      }
+      if (link.id === 'home' || link.href === '#home') {
+        return activeHomeSection === 'home';
+      }
+      return false;
+    }
+    return currentPage === link.page;
+  };
 
   const handleLinkClick = (e, link) => {
     e.preventDefault();
@@ -81,6 +150,12 @@ export default function Navbar({ currentPage = 'home', onNavigate }) {
     }
 
     // Home navigation
+    if (link.id === 'contact' || link.href === '#contact-form') {
+      setActiveHomeSection('contact');
+    } else if (link.id === 'home' || link.href === '#home') {
+      setActiveHomeSection('home');
+    }
+
     if (onNavigate) {
       onNavigate('home', link.href);
     } else {
@@ -97,6 +172,7 @@ export default function Navbar({ currentPage = 'home', onNavigate }) {
   const handleBookClick = (e) => {
     e.preventDefault();
     setMobileMenuOpen(false);
+    setActiveHomeSection('contact');
     if (onNavigate) {
       onNavigate('home', '#contact-form');
     } else {
@@ -120,7 +196,7 @@ export default function Navbar({ currentPage = 'home', onNavigate }) {
           {/* Brand Name Text Branding - Pure White Only */}
           <a
             href="#home"
-            onClick={(e) => handleLinkClick(e, { page: 'home', href: '#home' })}
+            onClick={(e) => handleLinkClick(e, { id: 'home', page: 'home', href: '#home' })}
             className="flex items-center focus:outline-none shrink-0 group py-1"
             aria-label="NAR Car Wash Home"
           >
@@ -132,7 +208,7 @@ export default function Navbar({ currentPage = 'home', onNavigate }) {
           {/* Desktop Nav Links */}
           <nav className="hidden lg:flex items-center gap-2 xl:gap-3.5 shrink-0">
             {navLinks.map((link) => {
-              const isActive = (currentPage === link.page) || (currentPage === 'home' && link.page === 'home' && link.href === '#home');
+              const isActive = isLinkActive(link);
               return (
                 <a
                   key={link.label}
@@ -213,7 +289,7 @@ export default function Navbar({ currentPage = 'home', onNavigate }) {
               </div>
 
               {navLinks.map((link) => {
-                const isCurrent = (currentPage === link.page) || (currentPage === 'home' && link.page === 'home' && link.href === '#home');
+                const isCurrent = isLinkActive(link);
                 return (
                   <button
                     key={link.label}

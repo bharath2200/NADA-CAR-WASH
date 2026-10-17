@@ -120,7 +120,7 @@ export default function WorkedBuildings({ onOpenBooking, onOpenCommercial }) {
   );
 
   return (
-    <section id="worked-buildings" className="py-14 sm:py-20 bg-[#131A21] relative overflow-hidden border-t border-[#384959]/50">
+    <section id="worked-buildings" className="pt-6 pb-12 sm:pt-14 sm:pb-20 bg-[#131A21] relative overflow-hidden border-t border-[#384959]/40">
       
       {/* Background ambient radial gradients */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[800px] h-[450px] bg-[#88BDF2]/10 rounded-full blur-[150px] pointer-events-none" />
@@ -129,7 +129,7 @@ export default function WorkedBuildings({ onOpenBooking, onOpenCommercial }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14 space-y-3">
+        <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-14 space-y-2.5 sm:space-y-3">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#1B242D] border border-[#384959] text-xs font-semibold text-[#BDDDFC]">
             <Building2 className="w-3.5 h-3.5 text-[#88BDF2]" />
             <span>ESTABLISHED DUBAI PORTFOLIO</span>
@@ -145,7 +145,7 @@ export default function WorkedBuildings({ onOpenBooking, onOpenCommercial }) {
         </div>
 
         {/* Operational Statistics Highlight Bar with 0 to 50+ Animation */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 mb-12 sm:mb-16">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 mb-8 sm:mb-16">
           <div className="rounded-2xl bg-[#182029] border border-[#384959] p-4 sm:p-6 text-center space-y-1">
             <div className="text-2xl sm:text-4xl font-extrabold text-[#88BDF2]">
               <AnimatedCounter target={50} suffix="+" duration={1600} />
