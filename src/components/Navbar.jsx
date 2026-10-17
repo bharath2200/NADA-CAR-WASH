@@ -197,13 +197,13 @@ export default function Navbar({ currentPage = 'home', onNavigate }) {
           <a
             href="#home"
             onClick={(e) => handleLinkClick(e, { id: 'home', page: 'home', href: '#home' })}
-            className="flex items-center focus:outline-none shrink-0 group py-0.5 overflow-visible"
+            className="flex items-center focus:outline-none shrink-0"
             aria-label="NAR Car Wash Home"
           >
             <img
               src="/Logo.png"
               alt="NAR Car Wash - NADA AL RABEE CAR WASHING LLC"
-              className="h-10 sm:h-12 md:h-13 w-auto max-w-[175px] sm:max-w-[230px] md:max-w-[270px] object-contain origin-left scale-[1.35] sm:scale-[1.25] transition-transform group-hover:scale-[1.4]"
+              className="h-10 sm:h-11 md:h-12 w-auto object-contain block"
             />
           </a>
 
