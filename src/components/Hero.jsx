@@ -3,7 +3,7 @@ import { Sparkles, ArrowRight, ShieldCheck, Droplets, MapPin } from 'lucide-reac
 
 export default function Hero({ onOpenBooking, onExploreServices }) {
   return (
-    <section id="home" className="relative pt-24 pb-8 sm:pt-28 sm:pb-14 lg:min-h-[calc(100vh-4rem)] flex flex-col justify-center overflow-hidden bg-[#131A21]">
+    <section id="home" className="relative min-h-[100svh] min-h-screen pt-20 pb-4 sm:pt-24 sm:pb-8 flex flex-col justify-between items-center overflow-hidden bg-[#131A21]">
       {/* Background Dubai Skyline at Dusk with High Visibility */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <img
@@ -21,7 +21,7 @@ export default function Hero({ onOpenBooking, onExploreServices }) {
       <div className="absolute bottom-10 right-10 w-[450px] h-[350px] bg-[#6A89A7]/10 rounded-full blur-[120px] pointer-events-none" />
 
       {/* Main Hero Content - Clean, Balanced & Vertically Centered */}
-      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10 text-center flex flex-col justify-center items-center py-2 sm:py-6">
+      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10 text-center flex-1 flex flex-col justify-center items-center py-2 sm:py-6">
 
         {/* Top Location / Service Pill */}
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1B242D]/90 backdrop-blur-md border border-[#384959] shadow-inner mb-4 sm:mb-6">
@@ -79,11 +79,13 @@ export default function Hero({ onOpenBooking, onExploreServices }) {
           </button>
         </div>
 
-        {/* Bottom Quality & Safety Guarantee - placed right under buttons */}
-        <p className="mt-4 sm:mt-6 text-[11px] sm:text-xs text-slate-300 max-w-md mx-auto text-center leading-normal">
+      </div>
+
+      {/* Bottom Quality & Safety Guarantee */}
+      <div className="relative z-10 w-full px-4 text-center pb-3 pt-1">
+        <p className="text-[11px] sm:text-xs text-slate-300 max-w-md mx-auto text-center leading-normal">
           Proprietary scratch-free polymer formula safe for ceramic coats, wraps, and delicate clear coats.
         </p>
-
       </div>
     </section>
   );

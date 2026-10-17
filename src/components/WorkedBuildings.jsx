@@ -120,7 +120,7 @@ export default function WorkedBuildings({ onOpenBooking, onOpenCommercial }) {
   );
 
   return (
-    <section id="worked-buildings" className="pt-6 pb-12 sm:pt-14 sm:pb-20 bg-[#131A21] relative overflow-hidden border-t border-[#384959]/40">
+    <section id="worked-buildings" className="pt-14 pb-14 sm:py-20 bg-[#131A21] relative overflow-hidden border-t border-[#384959]/50">
       
       {/* Background ambient radial gradients */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[800px] h-[450px] bg-[#88BDF2]/10 rounded-full blur-[150px] pointer-events-none" />
