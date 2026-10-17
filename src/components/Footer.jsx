@@ -24,13 +24,9 @@ export default function Footer({ onNavigate }) {
           <div className="lg:col-span-5 space-y-4">
             <a href="#home" onClick={scrollToTop} className="inline-block group focus:outline-none mb-3" aria-label="NAR Car Wash">
               <img
-                src="/images/nar-logo-diecut-white.png"
-                onError={(e) => {
-                  e.currentTarget.src = "https://i.ibb.co/dsc3Mr8F/NAR-Car-Wash-City-Skyline-1.png";
-                  e.currentTarget.style.filter = "drop-shadow(0 0 4px #ffffff)";
-                }}
+                src="/Logo.png"
                 alt="NAR Car Wash & Cleaning Services"
-                className="h-12 sm:h-14 w-auto object-contain transition-transform group-hover:scale-105"
+                className="h-11 sm:h-13 w-auto object-contain transition-transform group-hover:scale-105"
               />
             </a>
             

@@ -190,19 +190,21 @@ export default function Navbar({ currentPage = 'home', onNavigate }) {
             : 'bg-[#131A21]/90 backdrop-blur-sm sm:bg-transparent'
         }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 sm:py-4">
-        <div className="flex items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 sm:py-2.5">
+        <div className="flex items-center justify-between gap-3 sm:gap-4">
 
-          {/* Brand Name Text Branding - Pure White Only */}
+          {/* Brand Header Logo */}
           <a
             href="#home"
             onClick={(e) => handleLinkClick(e, { id: 'home', page: 'home', href: '#home' })}
-            className="flex items-center focus:outline-none shrink-0 group py-1"
+            className="flex items-center focus:outline-none shrink-0 group py-0.5 overflow-visible"
             aria-label="NAR Car Wash Home"
           >
-            <span className="text-xl sm:text-2xl font-black tracking-normal text-white font-['Poppins',sans-serif]">
-              NAR CAR WASH
-            </span>
+            <img
+              src="/Logo.png"
+              alt="NAR Car Wash - NADA AL RABEE CAR WASHING LLC"
+              className="h-10 sm:h-12 md:h-13 w-auto max-w-[175px] sm:max-w-[230px] md:max-w-[270px] object-contain origin-left scale-[1.35] sm:scale-[1.25] transition-transform group-hover:scale-[1.4]"
+            />
           </a>
 
           {/* Desktop Nav Links */}
