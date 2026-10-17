@@ -10,7 +10,7 @@ export const SERVICES = [
     tagline: 'Eco-Friendly & Scratch-Free Care',
     description:
       'Advanced polymer formula emulsifies and lifts sand and road grime away from the clear coat without a single drop of wastewater, preventing swirl marks.',
-    image: '/images/service-waterless.jpg',
+    image: '/images/poster-1.jpg',
     features: [
       'High-lubricity encapsulation technology',
       'Zero wastewater runoff – 100% eco-friendly',
@@ -25,7 +25,7 @@ export const SERVICES = [
     tagline: 'Deep Black Satin Finish',
     description:
       'Specialized UV-inhibiting tyre dressing that shields rubber against intense Dubai heat, road grit, and fading while delivering a rich satin gloss.',
-    image: '/images/service-tyre-rims.jpg',
+    image: '/images/poster-3.jpg',
     features: [
       'Non-sling hydrophobic formula',
       'UV & ozone cracking prevention',
@@ -40,7 +40,7 @@ export const SERVICES = [
     tagline: 'Streak-Free Precision Clarity',
     description:
       'Meticulous removal of stubborn brake dust and road film from multi-spoke alloy wheels, paired with streak-free optical glass polishing on all mirrors.',
-    image: '/images/service-tyre-rims.jpg',
+    image: '/images/poster-3.jpg',
     features: [
       'Safe for diamond-cut, painted & forged alloys',
       'Acid-free neutral pH brake dust dissolution',
@@ -55,7 +55,7 @@ export const SERVICES = [
     tagline: 'Mirror-Like Depth & Slickness',
     description:
       'Protective gloss enhancer buffs out light surface oxidation and creates a slick polymer barrier that keeps desert dust from clinging to paint.',
-    image: '/images/service-body-polish.jpg',
+    image: '/images/poster-2.jpg',
     features: [
       'Ultra-slick hydrophobic protective layer',
       'Deep optical gloss reflection',

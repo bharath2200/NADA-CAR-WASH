@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import WorkedBuildings from './components/WorkedBuildings';
+import PosterShowcase from './components/PosterShowcase';
 import Contact from './components/Contact';
 import ServicesPage from './components/ServicesPage';
 import CommercialPage from './components/CommercialPage';
@@ -115,7 +116,7 @@ export default function App() {
           />
         </main>
       ) : (
-        /* Streamlined High-Converting Homepage: Hero -> Worked Buildings -> Get in touch -> Footer */
+        /* Streamlined High-Converting Homepage: Hero -> Worked Buildings -> Posters Showcase -> Get in touch -> Footer */
         <main>
           {/* 01: Hero Section */}
           <Hero 
@@ -129,7 +130,12 @@ export default function App() {
             onOpenCommercial={() => handleNavigate('commercial')}
           />
 
-          {/* 03: Unified Get In Touch & Booking Form (Single form, no redundant cards) */}
+          {/* 03: Detailing Showcase (Posters 1, 2, 3) */}
+          <PosterShowcase 
+            onOpenBooking={() => handleNavigate('home', '#contact-form')}
+          />
+
+          {/* 04: Unified Get In Touch & Booking Form */}
           <Contact preselectedService={selectedService} />
         </main>
       )}

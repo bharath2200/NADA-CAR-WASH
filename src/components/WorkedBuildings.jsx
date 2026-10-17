@@ -4,7 +4,7 @@ import {
   MapPin, 
   ShieldCheck, 
   ArrowRight, 
-  Sparkles 
+  Sparkles
 } from 'lucide-react';
 import { createWhatsAppUrl } from '../utils/whatsapp';
 
@@ -115,6 +115,40 @@ export default function WorkedBuildings({ onOpenBooking, onOpenCommercial }) {
     }
   ];
 
+  const scrollRef = useRef(null);
+  const [isPaused, setIsPaused] = useState(false);
+  const isInteracting = useRef(false);
+
+  // Duplicate cards for seamless infinite horizontal slide loop
+  const duplicatedBuildings = [...buildingsData, ...buildingsData];
+
+  // Auto-scroll loop moving steadily from right to left
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    let animationFrameId;
+
+    const scrollStep = () => {
+      if (!isPaused && !isInteracting.current) {
+        container.scrollLeft += 0.85;
+
+        // When scrolled past half the duplicated items, loop back seamlessly
+        const halfWidth = container.scrollWidth / 2;
+        if (container.scrollLeft >= halfWidth) {
+          container.scrollLeft -= halfWidth;
+        }
+      }
+      animationFrameId = requestAnimationFrame(scrollStep);
+    };
+
+    animationFrameId = requestAnimationFrame(scrollStep);
+
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [isPaused]);
+
+
+
   const whatsappInquiryUrl = createWhatsAppUrl(
     'Hello NAR Car Wash, I am interested in partnering or scheduling waterless car washing for our building/community in Dubai.'
   );
@@ -145,7 +179,7 @@ export default function WorkedBuildings({ onOpenBooking, onOpenCommercial }) {
         </div>
 
         {/* Operational Statistics Highlight Bar with 0 to 50+ Animation */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 mb-8 sm:mb-16">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 mb-8 sm:mb-14">
           <div className="rounded-2xl bg-[#182029] border border-[#384959] p-4 sm:p-6 text-center space-y-1">
             <div className="text-2xl sm:text-4xl font-extrabold text-[#88BDF2]">
               <AnimatedCounter target={50} suffix="+" duration={1600} />
@@ -177,66 +211,91 @@ export default function WorkedBuildings({ onOpenBooking, onOpenCommercial }) {
           </div>
         </div>
 
-        {/* Buildings Showcase Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12 sm:mb-16">
-          {buildingsData.map((building) => {
-            const bookingWhatsApp = createWhatsAppUrl(
-              `Hello NAR Car Wash, I am a resident at ${building.name} (${building.location}) and would like to book a waterless car wash.`
-            );
+        {/* Buildings Showcase Cards - Auto-Sliding Carousel from Right to Left */}
+        <div className="relative mb-12 sm:mb-16 -mx-4 sm:-mx-6 lg:-mx-8">
+          {/* Subtle Left & Right Gradient Fade Masks */}
+          <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-[#131A21] to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-[#131A21] to-transparent z-10 pointer-events-none" />
 
-            return (
-              <div
-                key={building.id}
-                className="group glass-card rounded-2xl border border-[#384959] overflow-hidden hover:border-[#88BDF2] hover:bg-[#1E2833] transition-all duration-300 flex flex-col justify-between shadow-lg"
-              >
-                {/* Building Image Container */}
-                <div className="relative aspect-[16/10] overflow-hidden bg-[#182029]">
-                  <img
-                    src={building.image}
-                    alt={building.name}
-                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#131A21]/80 via-transparent to-transparent opacity-60" />
-                </div>
 
-                {/* Building Details */}
-                <div className="p-5 space-y-3 flex-1 flex flex-col justify-between">
-                  <div className="space-y-1.5">
-                    <div className="flex items-center gap-1.5 text-xs text-slate-300">
-                      <MapPin className="w-3.5 h-3.5 text-[#88BDF2] shrink-0" />
-                      <span>{building.location}</span>
+
+          {/* Infinite Smooth Scroll Container */}
+          <div
+            ref={scrollRef}
+            className="flex gap-4 sm:gap-6 overflow-x-auto no-scrollbar scroll-smooth px-4 sm:px-6 lg:px-8 py-2 select-none cursor-grab active:cursor-grabbing"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+            onTouchStart={() => { isInteracting.current = true; }}
+            onTouchEnd={() => { 
+              setTimeout(() => { 
+                isInteracting.current = false; 
+              }, 1000); 
+            }}
+          >
+            {duplicatedBuildings.map((building, index) => {
+              const bookingWhatsApp = createWhatsAppUrl(
+                `Hello NAR Car Wash, I am a resident at ${building.name} (${building.location}) and would like to book a waterless car wash.`
+              );
+
+              return (
+                <div
+                  key={`${building.id}-${index}`}
+                  className="group glass-card rounded-2xl border border-[#384959] overflow-hidden hover:border-[#88BDF2] hover:bg-[#1E2833] transition-all duration-300 flex flex-col justify-between shadow-lg w-[270px] xs:w-[290px] sm:w-[320px] md:w-[340px] shrink-0"
+                >
+                  {/* Building Image Container */}
+                  <div className="relative aspect-[16/10] overflow-hidden bg-[#182029]">
+                    <img
+                      src={building.image}
+                      alt={building.name}
+                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#131A21]/80 via-transparent to-transparent opacity-60" />
+                    
+                    {/* Tag Badge */}
+                    <div className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-[#1B242D]/90 backdrop-blur-md border border-[#384959] text-[10px] font-semibold text-[#BDDDFC]">
+                      {building.tag}
+                    </div>
+                  </div>
+
+                  {/* Building Details */}
+                  <div className="p-4 sm:p-5 space-y-3 flex-1 flex flex-col justify-between">
+                    <div className="space-y-1.5">
+                      <div className="flex items-center gap-1.5 text-xs text-slate-300">
+                        <MapPin className="w-3.5 h-3.5 text-[#88BDF2] shrink-0" />
+                        <span className="truncate">{building.location}</span>
+                      </div>
+
+                      <h3 className="text-base sm:text-lg font-bold text-white group-hover:text-[#BDDDFC] transition-colors leading-snug line-clamp-1">
+                        {building.name}
+                      </h3>
+
+                      <p className="text-xs text-slate-300">
+                        {building.service}
+                      </p>
                     </div>
 
-                    <h3 className="text-lg font-bold text-white group-hover:text-[#BDDDFC] transition-colors leading-snug">
-                      {building.name}
-                    </h3>
-
-                    <p className="text-xs text-slate-300">
-                      {building.service}
-                    </p>
-                  </div>
-
-                  {/* Card Bottom CTA */}
-                  <div className="pt-3 border-t border-[#384959]/60 flex items-center justify-between">
-                    <span className="text-[11px] text-slate-400 font-medium">
-                      Underground Bay Safe
-                    </span>
-                    <a
-                      href={bookingWhatsApp}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs font-semibold text-[#88BDF2] hover:text-[#BDDDFC] flex items-center gap-1 transition-colors"
-                      title={`Book Wash at ${building.name}`}
-                    >
-                      <span>Book Wash</span>
-                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-                    </a>
+                    {/* Card Bottom CTA */}
+                    <div className="pt-3 border-t border-[#384959]/60 flex items-center justify-between">
+                      <span className="text-[11px] text-slate-400 font-medium">
+                        Underground Bay Safe
+                      </span>
+                      <a
+                        href={bookingWhatsApp}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs font-semibold text-[#88BDF2] hover:text-[#BDDDFC] flex items-center gap-1 transition-colors"
+                        title={`Book Wash at ${building.name}`}
+                      >
+                        <span>Book Wash</span>
+                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                      </a>
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
 
         {/* Feature Banner: Bring NAR Car Wash to Your Building / Community */}
